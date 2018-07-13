@@ -3,7 +3,7 @@ import { map, startWith, bufferCount, filter } from 'rxjs/operators'
 
 import * as SVG from 'svg.js'
 
-import { TweenLite, Back, Power2, Power4 } from 'gsap'
+import { TweenLite, Back } from 'gsap'
 import { computePosition } from '../../animation/GSAPUtils'
 
 import { Vertex } from '../../../core/Vertex'
@@ -44,12 +44,15 @@ export class VertexVisual implements IVisual {
             .fill("#00000000")
             .stroke({
                 color: Defaults.selectedVertexFill,
-                dasharray: "8 8",
-                width: 2
+                dasharray: "10 10",
+                width: 2.5
 
             }).cx(0).cy(0)
+        
+        this.selectedCircleSVG.after(this.vertexSVG)
+
         this.selectedCircle = getElement(this.selectedCircleSVG)
-        TweenLite.set(this.selectedCircle, { opacity: 0, transformOrigin: "50% 50%" })
+        TweenLite.set(this.selectedCircle, { scale: 1.2, opacity: 0, transformOrigin: "50% 50%" })
 
         const states = options.states.pipe(
             startWith<VertexState>("normal"),
@@ -87,9 +90,9 @@ export class VertexVisual implements IVisual {
 
     private setWeight(weight: number) {
         TweenLite.to(this.vertex, 0.4, { attr: { r: weight * 5 }, ease: Back.easeOut })
-        TweenLite.to(this.selectedCircle, 0.7, {
-            attr: { r: (weight * 5) + 5 },
-            ease: Back.easeOut
+        TweenLite.to(this.selectedCircle, 1, {
+            attr: { r: (weight * 5) + 7 },
+            ease: Back.easeOut.config(1.2)
         })
     }
 
@@ -101,8 +104,6 @@ export class VertexVisual implements IVisual {
         if (newState == "selected") {
             TweenLite.to(this.selectedCircle, 0.3, { scale: 1, opacity: 1 })
         }
-
-        console.log(`${previousState} -> ${newState}`)
     }
 
     delete(): void {
