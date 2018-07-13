@@ -1,5 +1,5 @@
-import { Observable, pipe, UnaryFunction, zip } from "rxjs";
-import { map, filter, withLatestFrom } from "rxjs/operators";
+import { Observable, pipe, UnaryFunction, zip, of } from "rxjs";
+import { map, filter, withLatestFrom, flatMap, delay } from "rxjs/operators";
 
 export function when<T>(condition: Observable<boolean>): UnaryFunction<Observable<T>, Observable<T>> {
     return pipe(
@@ -18,5 +18,11 @@ export function zipWithIndex<T>(): UnaryFunction<Observable<T>, Observable<[T, n
 export function tagFirst<T>(): UnaryFunction<Observable<T>, Observable<[T, boolean]>> {
     return pipe(
         map<T, [T, boolean]>((v, i) => [v, i == 0])
+    )
+}
+
+export function delayItems<T>(delaySelector: (index: number) => number): UnaryFunction<Observable<T>, Observable<T>> {
+    return pipe(
+        flatMap<T, T>((e, i) => of(e).pipe(delay(delaySelector(i))))
     )
 }
