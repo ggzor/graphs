@@ -1,5 +1,5 @@
 import { Vector } from "./Vector";
 
 export function mouseEventAsVector(m: MouseEvent) {
-    return new Vector(m.x, m.y)
+    return new Vector(m.offsetX, m.offsetY)
 }
