@@ -1,0 +1,23 @@
+- desktop: first
+- navigate:
+    app: chrome
+    sites:
+      - https://webpack.js.org/concepts/
+      - http://svgjs.com/
+      - https://greensock.com/docs/TweenMax
+      - https://rxjs-dev.firebaseapp.com/api
+
+- desktop: ">"
+- vscode:
+    fullscreen: true
+    terminal: npm start
+
+- wait: 3s
+- desktop: ">"
+- navigate: 
+    app: chrome
+    sites: 
+        - http://localhost:8080
+
+- wait: 2s
+- desktop: "<"

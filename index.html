@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Graphs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <style>
+        html {
+            overflow-y: hidden;
+        }
+
+        #parent {
+            visibility: hidden;
+            overflow: auto;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #parent:not(*:root) {
+            visibility: visible;
+        }
+
+        #parent::-webkit-scrollbar {
+            visibility: hidden;
+        }
+
+        #child {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="parent">
+        <div id="child" class="columns">
+            <div class="column is-one-quarter">
+
+            </div>
+            <div class="column" style="padding: 5px 5px;">
+                <div id="container" style="margin: 0; padding: 0; width: 100%; height: 100%;">
+                    <div id="root" class="canvas" style="width: 100%; height: 100%;">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/output.js"></script>
+</body>
+
+</html>
