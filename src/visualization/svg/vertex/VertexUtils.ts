@@ -1,15 +1,18 @@
-import * as SVG from 'svg.js'
 import { Observable, merge, Subscription } from 'rxjs'
+
+import * as SVG from 'svg.js'
+
 import { Vertex } from '../../../core/Vertex'
 import { Vector } from '../../geometry/Vector'
 import { Rect } from '../../geometry/Rect'
-import { VertexVisual, VertexState } from './VertexVisual'
-import { positionWithConstantDuration } from './VertexVisualBind'
+
+
 import { adjustToBounds } from '../../manipulation/AdjustPosition'
 import { fromVisual } from '../../manipulation/Draggable'
 import { positionsFrom } from '../Dragging'
-import { startWith } from '../../../../node_modules/rxjs/operators';
-import { Defaults } from '../../Defaults'
+
+import { VertexVisual, VertexState } from './VertexVisual'
+import { positionWithConstantDuration } from './VertexVisualBind'
 
 export interface VertexVisualCreationOptions {
     container: SVG.Container
