@@ -6,13 +6,13 @@ import { mouseEventAsVector } from "../geometry/VectorUtils";
 import { IVisual } from "../IVisual";
 import { IDraggable } from "./IDraggable";
 
-export function fromVisual(visual: IVisual): IDraggable {
+export function fromVisual(container: HTMLElement, visual: IVisual): IDraggable {
     return {
         start: fromEvent<MouseEvent>(visual.element, 'mousedown').pipe(
             map(mouseEventAsVector),
             map(v => v.minus(visual.getPosition()))
         ),
-        move: fromEvent<MouseEvent>(window, 'mousemove').pipe(
+        move: fromEvent<MouseEvent>(container, 'mousemove').pipe(
             map(mouseEventAsVector)
         ),
         end: fromEvent<MouseEvent>(window, 'mouseup').pipe(

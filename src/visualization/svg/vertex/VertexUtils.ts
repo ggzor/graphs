@@ -15,7 +15,8 @@ import { VertexVisual, VertexState } from './VertexVisual'
 import { positionWithConstantDuration } from './VertexVisualBind'
 
 export interface VertexVisualCreationOptions {
-    container: SVG.Container
+    container: HTMLElement
+    canvas: SVG.Container
     vertices: Observable<Vertex>
     colors: Observable<string>
     states: Observable<VertexState>
@@ -29,7 +30,7 @@ class VertexVisualHandle implements IVertexVisualHandle {
     private readonly visual: VertexVisual
 
     constructor(options: VertexVisualCreationOptions) {
-        this.visual = new VertexVisual(options.container, {
+        this.visual = new VertexVisual(options.canvas, {
             colors: options.colors,
             vertices: options.vertices,
             states: options.states
@@ -38,7 +39,7 @@ class VertexVisualHandle implements IVertexVisualHandle {
         this.subscription = positionWithConstantDuration(this.visual,
             adjustToBounds(
                 merge(
-                    positionsFrom(fromVisual(this.visual)),
+                    positionsFrom(fromVisual(options.container, this.visual)),
                     options.positions
                 ),
                 this.visual.sizes, options.bounds, true
