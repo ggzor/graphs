@@ -12,7 +12,7 @@ import { positionsFrom } from "../Dragging"
 
 import { Vector } from "../../geometry/Vector"
 import { Size } from "../../geometry/Size"
-import { asRect } from "../../geometry/RectUtils"
+import { asRect } from "../../geometry/Utils";
 
 import addPositioning, { VertexMovement } from "./VertexPositioning"
 
