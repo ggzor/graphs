@@ -45,8 +45,8 @@ export function fromVisualWithMouse(container: HTMLElement, visual: IVisual): ID
 
     return adjustToDefaults({
         start: inContainer(visual.element)("mousedown"),
-        move: fromWindow("mousemove"),
-        end: fromWindow("mouseup")
+        move: fromWindow("mousemove", false),
+        end: fromWindow("mouseup", false)
     }, visual)
 }
 
