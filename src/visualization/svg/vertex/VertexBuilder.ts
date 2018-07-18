@@ -18,8 +18,6 @@ import { sizesOf } from "../../manipulation/SizeObserver"
 import { asRect } from "../../geometry/RectUtils"
 import { Size } from "../../geometry/Size"
 
-import { asSequence } from "sequency"
-
 export interface VertexCreationOptions {
     colors: Observable<string>
     vertices: Observable<Vertex>
