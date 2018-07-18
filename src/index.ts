@@ -23,7 +23,9 @@ const positions = of(nextVectors).pipe(
     map<Vector, VertexMovement>((v, i) => i == 0 ? v : [v, 0.4]),
 )
 
-const sub = createVertex(canvas, container, {
+createVertex({
+    parent: canvas,
+    container,
     colors: NEVER,
     vertices: of(new Vertex("V", 8)),
     positions: positions,
