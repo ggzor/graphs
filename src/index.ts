@@ -26,7 +26,8 @@ const positions = of(nextVectors).pipe(
 const sub = createVertex(canvas, container, {
     colors: NEVER,
     vertices: of(new Vertex("V", 8)),
-    positions: positions
+    positions: positions,
+    canDrag: of(true)
 })
 
 //setTimeout(() => sub.unsubscribe(), 10000)
