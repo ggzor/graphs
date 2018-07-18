@@ -1,35 +1,59 @@
 import * as SVG from 'svg.js'
-import { of, NEVER, Observable } from 'rxjs';
+import { of, fromEvent, merge, combineLatest } from 'rxjs';
 import { Vertex } from './core/Vertex';
 import { createVertex } from './visualization/svg/vertex/VertexBuilder';
+import { map, filter, timestamp, repeat, throttleTime } from 'rxjs/operators';
+import { touchEventAsVector, mouseEventAsVector } from './visualization/geometry/Utils';
 import { Vector } from './visualization/geometry/Vector';
-import { VertexMovement } from './visualization/svg/vertex/VertexPositioning';
-import { flatMap, scan, map, tap, startWith } from 'rxjs/operators';
 import { delayItems } from './rx/AdditionalOperators';
 
 const canvas = SVG('root')
+const canvasElement = document.getElementById(canvas.id())
 const container = document.getElementById('container')
 
-const start = new Vector(0, 0)
-const nextVectors = [
-    new Vector(50, 50)
-]
+const ifTargetIsCanvas = filter((event: Event) => event.target === canvasElement)
 
-const positions = of(nextVectors).pipe(
-    flatMap(v => v),
-    scan((cur, next) => cur.add(next), start),
-    startWith(start),
-    delayItems(i => i * 2000),
-    map<Vector, VertexMovement>((v, i) => i == 0 ? v : [v, 0.4]),
+const downEvent = merge(
+    fromEvent(container, 'mousedown').pipe(
+        ifTargetIsCanvas,
+        map(mouseEventAsVector)
+    ),
+    fromEvent(container, 'touchdown').pipe(
+        ifTargetIsCanvas,
+        map(touchEventAsVector)
+    ),
 )
 
-createVertex({
-    parent: canvas,
-    container,
-    colors: NEVER,
-    vertices: of(new Vertex("V", 8)),
-    positions: positions,
-    canDrag: of(true)
-})
+const upEvent = merge(
+    fromEvent(container, 'mouseup'),
+    merge(
+        fromEvent(container, 'touchend'),
+        fromEvent(container, 'touchcancel')
+    )
+).pipe(
+    ifTargetIsCanvas
+)
 
-//setTimeout(() => sub.unsubscribe(), 10000)
+combineLatest(downEvent.pipe(timestamp()), upEvent.pipe(timestamp())).pipe(
+    filter(([{ timestamp: start }, { timestamp: end }]
+        : [{ timestamp: number, value: Vector }, { timestamp: number }]) => {
+
+        const diff = end - start
+        return start < end && 0 <= diff && diff <= 300
+    }),
+    map(t => t[0].value),
+    throttleTime(200)
+).subscribe(v => {
+    createVertex({
+        parent: canvas,
+        container,
+        colors: of('231123', '82204A', '558C8C', 'E8DB7D').pipe(
+            map(c => `#${c}`),
+            repeat(10),
+            delayItems(i => i * 2000),
+        ),
+        vertices: of(new Vertex("V", Math.max(1, Math.floor(Math.random() * 8)))),
+        canDrag: of(true),
+        positions: of(v)
+    })
+})

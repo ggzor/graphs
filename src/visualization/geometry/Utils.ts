@@ -6,8 +6,17 @@ export function asRect(size: Size) {
     return new Rect(0, 0, size.width, size.height)
 }
 
-export const mouseEventAsVectorInContainer = (container: HTMLElement) => (event: MouseEvent) => {
-    const vector = new Vector(event.clientX, event.clientY)
-    const bounds = container.getBoundingClientRect()
-    return vector.minus(new Vector(bounds.left, bounds.top))
+export function boundingRect(element: HTMLElement): Rect {
+    const { left, top, right, bottom } = element.getBoundingClientRect()
+    return new Rect(left, top, right - left, bottom - top)
+}
+
+export function mouseEventAsVector(event: MouseEvent): Vector {
+    const { clientX, clientY } = event
+    return new Vector(clientX, clientY)
+}
+
+export function touchEventAsVector(event: TouchEvent): Vector {
+    const { clientX, clientY } = event.targetTouches.item(0)
+    return new Vector(clientX, clientY)
 }

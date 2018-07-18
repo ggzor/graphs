@@ -3,7 +3,9 @@ import { map, throttleTime, tap } from "rxjs/operators";
 
 import { IVisual } from "../IVisual";
 import { IDraggable } from "./IDraggable";
+
 import { Vector } from "../geometry/Vector";
+import { mouseEventAsVector, touchEventAsVector } from "../geometry/Utils";
 
 const getObservableFromEvent = <T extends Event>(mapper: (event: T) => Vector) =>
     (container: HTMLElement) => (element: HTMLElement | Window) =>
@@ -21,15 +23,7 @@ const getObservableFromEvent = <T extends Event>(mapper: (event: T) => Vector) =
             )
         }
 
-function mouseEventAsVector(event: MouseEvent): Vector {
-    const { clientX, clientY } = event
-    return new Vector(clientX, clientY)
-}
 
-function touchEventAsVector(event: TouchEvent): Vector {
-    const { clientX, clientY } = event.targetTouches.item(0)
-    return new Vector(clientX, clientY)
-}
 
 function adjustToDefaults(d: IDraggable, visual: IVisual): IDraggable {
     return {
