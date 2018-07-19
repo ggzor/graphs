@@ -34,12 +34,14 @@
     "@types/faker": "4.1.2"
   },
   "dependencies": {
+    "bitset.js": "^5.0.0",
     "bulma": "^0.7.1",
     "css-element-queries": "^1.0.2",
     "gsap": "^2.0.1",
     "immutable": "^3.8.2",
     "rxjs": "^6.2.1",
-    "svg.js": "^2.6.5"
+    "svg.js": "^2.6.5",
+    "bitset": "^5.0.3"
   },
   "jshintConfig": {
     "esversion": 6

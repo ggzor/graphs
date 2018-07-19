@@ -1,9 +1,9 @@
 import { Observable, combineLatest } from "rxjs"
-import { map, windowToggle, withLatestFrom, flatMap, startWith, timestamp } from "rxjs/operators"
+import { map, windowToggle, withLatestFrom, flatMap, startWith, timestamp, distinctUntilChanged } from "rxjs/operators"
 
 import { Vector } from "../geometry/Vector"
 
-import { IDraggable } from "../manipulation/IDraggable"
+import { IDraggable } from "./IDraggable"
 
 export function positionsFrom(draggable: IDraggable): Observable<Vector> {
     return draggable.move.pipe(
@@ -15,16 +15,17 @@ export function positionsFrom(draggable: IDraggable): Observable<Vector> {
 }
 
 export function isDragging({ start, end }: IDraggable) {
-    return combineLatest([start, end].map(o => o.pipe(timestamp())))
+    return combineLatest([start, end.pipe(startWith(null))].map(o => o.pipe(timestamp())))
         .pipe(
             map(l => {
                 const [press, release] = l
 
-                if (release != null)
+                if (release.value != null)
                     return press.timestamp > release.timestamp
                 else
-                    return press != null
+                    return press.value != null
             }),
-            startWith(false)
+            startWith(false),
+            distinctUntilChanged()
         )
 }

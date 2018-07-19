@@ -1,11 +1,11 @@
-import { fromEvent, merge } from "rxjs";
-import { map, throttleTime, tap } from "rxjs/operators";
+import { fromEvent, merge } from "rxjs"
+import { map, throttleTime, tap } from "rxjs/operators"
 
-import { IVisual } from "../IVisual";
-import { IDraggable } from "./IDraggable";
+import { IVisual } from "../IVisual"
+import { IDraggable } from "./IDraggable"
 
-import { Vector } from "../geometry/Vector";
-import { mouseEventAsVector, touchEventAsVector } from "../geometry/Utils";
+import { Vector } from "../geometry/Vector"
+import { mouseEventAsVector, touchEventAsVector } from "../geometry/Utils"
 
 const getObservableFromEvent = <T extends Event>(mapper: (event: T) => Vector) =>
     (container: HTMLElement) => (element: HTMLElement | Window) =>
@@ -22,8 +22,6 @@ const getObservableFromEvent = <T extends Event>(mapper: (event: T) => Vector) =
                 })
             )
         }
-
-
 
 function adjustToDefaults(d: IDraggable, visual: IVisual): IDraggable {
     return {

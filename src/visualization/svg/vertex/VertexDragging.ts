@@ -8,7 +8,7 @@ import { when } from "../../../rx/AdditionalOperators"
 import { fromVisualWithMouseAndTouch } from "../../manipulation/Draggable"
 import { adjustToBounds } from "../../manipulation/AdjustPosition"
 import { Movement } from "../../manipulation/Movement"
-import { positionsFrom, isDragging } from "../Dragging"
+import { positionsFrom, isDragging } from "../../manipulation/Dragging"
 
 import { Size } from "../../geometry/Size"
 import { Rect } from "../../geometry/Rect"
