@@ -7,13 +7,12 @@ import { when } from "../../../rx/AdditionalOperators"
 
 import { fromVisualWithMouseAndTouch } from "../../manipulation/Draggable"
 import { adjustToBounds } from "../../manipulation/AdjustPosition"
+import { Movement } from "../../manipulation/Movement"
 import { positionsFrom, isDragging } from "../Dragging"
 
 import { Size } from "../../geometry/Size"
 import { Rect } from "../../geometry/Rect"
 import { Vector } from "../../geometry/Vector"
-import { Movement } from "../../manipulation/Movement"
-
 
 export interface VertexDraggingOptions {
     base: VisualBase
@@ -32,7 +31,7 @@ export interface VertexDraggingOutProperties {
     finalPositions: Observable<Movement>
 }
 
-export function addDragging(options: VertexDraggingOptions): VertexDraggingOutProperties {
+export default function addDragging(options: VertexDraggingOptions): VertexDraggingOutProperties {
     const { controlVisual, container, positions, sizes, bounds, canDrag } = options
 
     const dragging = fromVisualWithMouseAndTouch(container, controlVisual);

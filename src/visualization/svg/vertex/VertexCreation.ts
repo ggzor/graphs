@@ -1,13 +1,13 @@
 import { VisualBase } from "../VisualBase"
 import * as SVG from 'svg.js'
-import addVertexVisual from "./VertexVisual"
+import addDragging from "./VertexDragging"
 import addPositioning from "./VertexPositioning"
+import addVertexVisual from "./VertexVisual"
 
 import { Observable, Unsubscribable } from "rxjs"
 import { map } from "rxjs/operators"
 import { groupSubscriptions } from "../../../rx/SubscriptionUtils"
 
-import { addDragging } from "./VertexDragging"
 import { sizesOf } from "../../manipulation/SizeObserver"
 import { Vertex } from "../../../core/Vertex"
 import { asRect } from "../../geometry/Utils"
@@ -29,7 +29,7 @@ export interface VertexCreationOutProperties extends Unsubscribable {
     finalPositions: Observable<Movement>
 }
 
-export function createVertex(options: VertexCreationOptions): VertexCreationOutProperties {
+export default function createVertex(options: VertexCreationOptions): VertexCreationOutProperties {
     const { parent, container, colors, vertices, positions, canDrag } = options
 
     const base = new VisualBase(parent)

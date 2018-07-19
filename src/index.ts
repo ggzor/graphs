@@ -1,7 +1,7 @@
 import * as SVG from 'svg.js'
 import { of, fromEvent, merge, combineLatest } from 'rxjs';
 import { Vertex } from './core/Vertex';
-import { createVertex } from './visualization/svg/vertex/VertexBuilder';
+import createVertex from './visualization/svg/vertex/VertexCreation';
 import { map, filter, timestamp, repeat, throttleTime } from 'rxjs/operators';
 import { touchEventAsVector, mouseEventAsVector } from './visualization/geometry/Utils';
 import { Vector } from './visualization/geometry/Vector';
