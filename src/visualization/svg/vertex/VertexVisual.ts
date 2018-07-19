@@ -1,24 +1,26 @@
 import { VisualBase } from "../VisualBase"
-import { IVisual } from "../../IVisual";
+import { IVisual } from "../../IVisual"
 import { TweenLite, Back } from "gsap"
-import { computePosition } from "../../animation/GSAPUtils";
+import { computePosition } from "../../animation/GSAPUtils"
 
 import { Observable, Unsubscribable } from "rxjs"
-import { map } from "rxjs/operators";
-import { groupSubscriptions } from "../../../rx/SubscriptionUtils";
+import { map } from "rxjs/operators"
+import { groupSubscriptions } from "../../../rx/SubscriptionUtils"
 
-import { Size } from "../../geometry/Size";
+import { Size } from "../../geometry/Size"
 
+import * as SVG from "svg.js"
 import { Defaults } from "../../Defaults"
 
 export interface VertexVisualOptions {
-    base: VisualBase,
-    colors: Observable<string>,
+    base: VisualBase
+    colors: Observable<string>
     weights: Observable<number>
 }
 
 export interface VertexVisualOutProperties extends Unsubscribable {
-    visual: IVisual,
+    visual: IVisual
+    svg: SVG.Circle
     sizes: Observable<Size>
 }
 
@@ -30,7 +32,7 @@ export default function addVertexVisual(options: VertexVisualOptions): VertexVis
 
     const controlVisual = {
         element: vertex,
-        getPosition() { return computePosition(base.element); }
+        getPosition() { return computePosition(base.element) }
     }
 
     const subscriptions = [
@@ -45,6 +47,7 @@ export default function addVertexVisual(options: VertexVisualOptions): VertexVis
 
     return {
         visual: controlVisual,
+        svg,
         sizes: weights.pipe(map(w => w * 10), map(w => new Size(w, w))),
         unsubscribe: () => groupSubscriptions(...subscriptions)
     }
