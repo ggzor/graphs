@@ -4,14 +4,13 @@ import { map } from "rxjs/operators"
 import { Rect } from "../geometry/Rect"
 import { Vector } from "../geometry/Vector"
 import { Size } from "../geometry/Size"
-
-import { VertexMovement } from "../svg/vertex/VertexPositioning"
+import { Movement } from "./Movement"
 
 export function adjustToBounds(
-    positions: Observable<VertexMovement>,
+    positions: Observable<Movement>,
     sizes: Observable<Size>,
     bounds: Observable<Rect>,
-    positionIsFromCenter: boolean = false): Observable<VertexMovement> {
+    positionIsFromCenter: boolean = false): Observable<Movement> {
     return combineLatest(positions, sizes, bounds).pipe(
         map(t => {
             const [movement, size, bounds] = t
@@ -21,7 +20,7 @@ export function adjustToBounds(
             if (movement instanceof Vector)
                 return adjusted
             else
-                return <VertexMovement>[adjusted, movement[1]]
+                return <Movement>[adjusted, movement[1]]
         })
     )
 }

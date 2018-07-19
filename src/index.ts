@@ -11,6 +11,10 @@ const canvas = SVG('root')
 const canvasElement = document.getElementById(canvas.id())
 const container = document.getElementById('container')
 
+const addEvent = fromEvent<MouseEvent>(canvas, 'click').pipe(map(mouseEventAsVector))
+
+addEvent.subscribe(console.log)
+
 const ifTargetIsCanvas = filter((event: Event) => event.target === canvasElement)
 
 const downEvent = merge(
@@ -42,7 +46,7 @@ combineLatest(downEvent.pipe(timestamp()), upEvent.pipe(timestamp())).pipe(
         return start < end && 0 <= diff && diff <= 300
     }),
     map(t => t[0].value),
-    throttleTime(200)
+    throttleTime(250)
 ).subscribe(v => {
     createVertex({
         parent: canvas,

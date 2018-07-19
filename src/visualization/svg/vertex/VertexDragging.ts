@@ -10,17 +10,17 @@ import { adjustToBounds } from "../../manipulation/AdjustPosition"
 import { positionsFrom, isDragging } from "../Dragging"
 
 import { Size } from "../../geometry/Size"
-import { Rect } from "../../geometry/Rect";
+import { Rect } from "../../geometry/Rect"
 import { Vector } from "../../geometry/Vector"
+import { Movement } from "../../manipulation/Movement"
 
-import { VertexMovement } from "./VertexPositioning"
 
 export interface VertexDraggingOptions {
     base: VisualBase
     controlVisual: IVisual
     container: HTMLElement
 
-    positions: Observable<VertexMovement>
+    positions: Observable<Movement>
     sizes: Observable<Size>
     bounds: Observable<Rect>
 
@@ -29,7 +29,7 @@ export interface VertexDraggingOptions {
 
 export interface VertexDraggingOutProperties {
     isDragging: Observable<boolean>
-    finalPositions: Observable<VertexMovement>
+    finalPositions: Observable<Movement>
 }
 
 export function addDragging(options: VertexDraggingOptions): VertexDraggingOutProperties {
@@ -37,7 +37,7 @@ export function addDragging(options: VertexDraggingOptions): VertexDraggingOutPr
 
     const dragging = fromVisualWithMouseAndTouch(container, controlVisual);
     const draggingPositions = positionsFrom(dragging).pipe(
-        map<Vector, VertexMovement>(p => [p, 0.3]),
+        map<Vector, Movement>(p => [p, 0.3]),
         when(canDrag)
     )
 

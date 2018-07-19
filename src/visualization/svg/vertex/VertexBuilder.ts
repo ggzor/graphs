@@ -1,9 +1,9 @@
 import { VisualBase } from "../VisualBase"
 import * as SVG from 'svg.js'
 import addVertexVisual from "./VertexVisual"
-import addPositioning, { VertexMovement } from "./VertexPositioning"
+import addPositioning from "./VertexPositioning"
 
-import { Observable, Unsubscribable, of } from "rxjs"
+import { Observable, Unsubscribable } from "rxjs"
 import { map } from "rxjs/operators"
 import { groupSubscriptions } from "../../../rx/SubscriptionUtils"
 
@@ -11,6 +11,7 @@ import { addDragging } from "./VertexDragging"
 import { sizesOf } from "../../manipulation/SizeObserver"
 import { Vertex } from "../../../core/Vertex"
 import { asRect } from "../../geometry/Utils"
+import { Movement } from "../../manipulation/Movement";
 
 export interface VertexCreationOptions {
     parent: SVG.Container
@@ -18,13 +19,14 @@ export interface VertexCreationOptions {
 
     colors: Observable<string>
     vertices: Observable<Vertex>
-    positions: Observable<VertexMovement>,
+    positions: Observable<Movement>,
 
     canDrag: Observable<boolean>
 }
 
 export interface VertexCreationOutProperties extends Unsubscribable {
     isDragging: Observable<boolean>
+    finalPositions: Observable<Movement>
 }
 
 export function createVertex(options: VertexCreationOptions): VertexCreationOutProperties {
@@ -45,7 +47,7 @@ export function createVertex(options: VertexCreationOptions): VertexCreationOutP
     ]
 
     return {
-        isDragging,
+        isDragging, finalPositions,
         unsubscribe: () => groupSubscriptions(...subscriptions)
     }
 }
