@@ -1,52 +1,50 @@
 import { VisualBase } from "../VisualBase"
 import { IVisual } from "../../IVisual"
 
-import { Observable, Subscription, merge } from "rxjs"
+import { Observable, merge } from "rxjs"
 import { map } from "rxjs/operators"
 import { when } from "../../../rx/AdditionalOperators"
 
 import { fromVisualWithMouseAndTouch } from "../../manipulation/Draggable"
 import { adjustToBounds } from "../../manipulation/AdjustPosition"
-import { sizesOf } from "../../manipulation/SizeObserver"
-import { positionsFrom } from "../Dragging"
+import { positionsFrom, isDragging } from "../Dragging"
 
-import { Vector } from "../../geometry/Vector"
 import { Size } from "../../geometry/Size"
-import { asRect } from "../../geometry/Utils";
+import { Rect } from "../../geometry/Rect";
+import { Vector } from "../../geometry/Vector"
 
-import addPositioning, { VertexMovement } from "./VertexPositioning"
+import { VertexMovement } from "./VertexPositioning"
 
-export interface VertexDraggingCreationOptions {
+export interface VertexDraggingOptions {
     base: VisualBase
     controlVisual: IVisual
     container: HTMLElement
+
     positions: Observable<VertexMovement>
-    weights: Observable<number>
+    sizes: Observable<Size>
+    bounds: Observable<Rect>
+
     canDrag: Observable<boolean>
 }
 
-export function addDragging(options: VertexDraggingCreationOptions): Subscription {
-    const { base, controlVisual, container, positions, weights, canDrag } = options
+export interface VertexDraggingOutProperties {
+    isDragging: Observable<boolean>
+    finalPositions: Observable<VertexMovement>
+}
 
-    const draggingPositions = positionsFrom(fromVisualWithMouseAndTouch(container, controlVisual)).pipe(
+export function addDragging(options: VertexDraggingOptions): VertexDraggingOutProperties {
+    const { controlVisual, container, positions, sizes, bounds, canDrag } = options
+
+    const dragging = fromVisualWithMouseAndTouch(container, controlVisual);
+    const draggingPositions = positionsFrom(dragging).pipe(
         map<Vector, VertexMovement>(p => [p, 0.3]),
         when(canDrag)
     )
 
     const finalPositions = adjustToBounds(
-        merge(
-            positions,
-            draggingPositions
-        ),
-        weights.pipe(
-            map(w => w * 10),
-            map(w => new Size(w, w))
-        ),
-        sizesOf(container).pipe(
-            map(asRect)
-        ),
-        true
+        merge(positions, draggingPositions),
+        sizes, bounds, true
     )
 
-    return addPositioning(base, finalPositions)
+    return { isDragging: isDragging(dragging), finalPositions }
 }

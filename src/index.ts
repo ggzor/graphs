@@ -55,5 +55,5 @@ combineLatest(downEvent.pipe(timestamp()), upEvent.pipe(timestamp())).pipe(
         vertices: of(new Vertex("V", Math.max(1, Math.floor(Math.random() * 8)))),
         canDrag: of(true),
         positions: of(v)
-    })
+    }).isDragging.subscribe(console.log)
 })

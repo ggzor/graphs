@@ -1,11 +1,11 @@
 import { VisualBase } from "../VisualBase"
 import { TweenLite } from "gsap"
-import { Observable } from "rxjs"
+import { Observable, Subscription } from "rxjs"
 import { Vector } from "../../geometry/Vector"
 
 export type VertexMovement = Vector | [Vector, number]
 
-export default function addPositioning(visual: VisualBase, positions: Observable<VertexMovement>) {
+export default function addPositioning(visual: VisualBase, positions: Observable<VertexMovement>): Subscription {
     return positions.subscribe(movement => {
         const targets = (positions: Vector) => ({ x: positions.x, y: positions.y })
 
