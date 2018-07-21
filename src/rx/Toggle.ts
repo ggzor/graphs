@@ -1,6 +1,5 @@
 import { Unsubscribable, Observable, Subject, Subscription, identity, merge } from "rxjs";
-import { filter, mapTo } from "rxjs/operators";
-import { when } from "./AdditionalOperators";
+import { filter, mapTo, withLatestFrom } from "rxjs/operators";
 import { Register } from "./Register";
 
 export class Toggle implements Unsubscribable, Register<Observable<boolean>, Observable<boolean>> {
@@ -42,11 +41,12 @@ export class Toggle implements Unsubscribable, Register<Observable<boolean>, Obs
     private rebuildSubscription(): void {
         const indexed = this.observables.map((o, i) => o.pipe(filter(identity), mapTo(i)))
 
-        this.subscription = merge(...indexed).pipe(when(this.isWorking)).subscribe(i => {
-            this.subjects.forEach((sub, j) => {
-                if (i !== j)
-                    sub.next(false)
-            })
+        this.subscription = merge(...indexed).pipe(withLatestFrom(this.isWorking)).subscribe(t => {
+            const [i, applyLogic] = t
+            if (applyLogic)
+                this.subjects.forEach((sub, j) => sub.next(i == j))
+            else
+                this.subjects[i].next(true)
         })
     }
 }

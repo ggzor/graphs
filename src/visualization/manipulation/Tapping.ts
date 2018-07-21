@@ -7,6 +7,7 @@ const getEventFromElement = (element: HTMLElement) => (eventName: string) => {
     return fromEvent(element, eventName).pipe(map(_ => ({})))
 }
 
+const tapDifference = 200
 function tapping<T, R>(start: Observable<T>, end: Observable<R>): Observable<T> {
     return end.pipe(
         timestamp(),
@@ -14,7 +15,7 @@ function tapping<T, R>(start: Observable<T>, end: Observable<R>): Observable<T> 
         filter(t => {
             const [{ timestamp: end }, { timestamp: start }] = t
 
-            return start < end && end - start < 100
+            return start < end && end - start < tapDifference
         }),
         map(t => t[1].value)
     )
